@@ -1,25 +1,25 @@
 %% wavelet image extraction
+% daily click data where the time unit is 1 min
+dir = '/Users/sangwonhwang/Desktop/mikecohen_퓨리에변환/data/daily_click_df.csv';
+daily_click = importdata(dir);
+[click_r, click_c] = size(daily_click.data());
 
-% daily click data %
-% dir = '/Users/sangwonhwang/Desktop/mikecohen_퓨리에변환/data/daily_click_df.csv';
-% daily_click = importdata(dir);
-% [click_r, click_c] = size(daily_click.data());
-
+% daily click data where the time unit is 5 min
 dir_5 = '/Users/sangwonhwang/Desktop/mikecohen_퓨리에변환/data/daily_click_df_5.csv';
 daily_click_5 = importdata(dir_5);
 [click_r_5, click_c_5] = size(daily_click_5.data());
 
-% figure(1), clf
-% hold on
-% % subplot
-% for i=1:(click_c-1)
-%         subplot(2, ceil((click_c-1)/2), i);
-%         plot(normalize(daily_click.data(:,i+1)))
-%         xlabel('Time (min)'), ylabel('Click')
-% end
-% hold off
-
 figure(1), clf
+hold on
+% subplot
+for i=1:(click_c-1)
+        subplot(2, ceil((click_c-1)/2), i);
+        plot(normalize(daily_click.data(:,i+1)))
+        xlabel('Time (min)'), ylabel('Click')
+end
+hold off
+
+figure(2), clf
 hold on
 % subplot
 for i=1:21
@@ -30,42 +30,18 @@ for i=1:21
 end
 hold off
 
+%%
+% daily conversion data where the time unit is 1 min
+dir = '/Users/sangwonhwang/Desktop/mikecohen_퓨리에변환/data/daily_conversion_df.csv'
+daily_conversion = importdata(dir)
+[conversion_r, conversion_c] = size(daily_conversion.data())
 
-% % raw conversion data %
-% dir = '/Users/sangwonhwang/Desktop/mikecohen_퓨리에변환/data/daily_conversion_df.csv'
-% daily_conversion = importdata(dir)
-% [conversion_r, conversion_c] = size(daily_conversion.data())
-
+% daily conversion data where the time unit is 5 min
 dir_5 = '/Users/sangwonhwang/Desktop/mikecohen_퓨리에변환/data/daily_conversion_df_5.csv'
 daily_conversion_5 = importdata(dir_5)
 [conversion_r_5, conversion_c_5] = size(daily_conversion_5.data())
 
-% figure(2), clf
-% hold on
-% % subplot
-% for i=1:(click_c-1)
-%     subplot(2, ceil((click_c-1)/2), i);
-%     plot(daily_conversion.data(:,i+1))
-%     xlabel('Time (min)'), ylabel('Conversion')
-% end
-% hold off
-
-figure(3), clf
-hold on
-% subplot
-for i=1:21
-        subplot(3, 7, i);
-        plot(normalize(daily_conversion_5.data(:,i+1)))
-        xlabel('Time (min)'), ylabel('Conversion')
-        title([ sprintf('D%d', i) ])
-end
-hold off
-
-
-% 컨버전 전체
-% subplot
-%%
-
+figure(3), clf % each figure has 5 sub plots
 for k=1:(conversion_c/5)    
     
     figure(k), clf
@@ -81,9 +57,50 @@ for k=1:(conversion_c/5)
     end
     hold off
     saveas(figure(k),sprintf('%d_5day_conversion.jpg', k));
+end
+
+figure(4), clf % each figure has 5 sub plots
+for k=1:(conversion_c5/5)    
+    
+    figure(k), clf
+    hold on
+%     disp(k)
+    for i=((k-1)*5+1):(k*5)
+%         disp(i)
+%         disp((i-(k-1)*5))
+        subplot(1, 5, (i-(k-1)*5 ));
+        plot(daily_conversion_5.data(:,i))
+        title([ sprintf('%d', i) ])
+%         xlabel('Time (min)'), ylabel('Conversion')
+    end
+    hold off
+    saveas(figure(k),sprintf('%d_5day_conversion.jpg', k));
 
 end
 
+% figure(3), clf
+% hold on
+% % subplot
+% for i=1:(click_c-1)
+%     subplot(2, ceil((click_c-1)/2), i);
+%     plot(daily_conversion.data(:,i+1))
+%     xlabel('Time (min)'), ylabel('Conversion')
+% end
+% hold off
+% 
+% figure(4), clf
+% hold on
+% % subplot
+% for i=1:21
+%         subplot(3, 7, i);
+%         plot(normalize(daily_conversion_5.data(:,i+1)))
+%         xlabel('Time (min)'), ylabel('Conversion')
+%         title([ sprintf('D%d', i) ])
+% end
+% hold off
+
+
+%%
 
 % three wavelet transform %
 w_type = ["morse", "amor", "bump"]
